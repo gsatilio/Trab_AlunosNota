@@ -25,6 +25,10 @@ namespace Trab_AlunosNota
         {
             return this.nome;
         }
+        public int getMatricula()
+        {
+            return this.matricula;
+        }
         public void setNumero(int numero)
         {
             this.matricula = numero;
@@ -39,7 +43,7 @@ namespace Trab_AlunosNota
         }
         public override string? ToString()
         {
-            return "Aluno: " + nome + " numero: " + matricula;
+            return "Matrícula...: [ " + matricula + " ] Aluno...: " + nome;
         }
     }
 }

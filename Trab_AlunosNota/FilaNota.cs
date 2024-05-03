@@ -23,14 +23,14 @@ namespace Trab_AlunosNota
         }
         public void push(Nota aux)
         {
+            int contador = 0;
+            Nota aux2 = inicio;
             if (vazia())
             {
                 this.inicio = this.fim = aux;
             }
             else
             {
-                int contador = 0;
-                Nota aux2 = inicio;
                 do
                 {
                     if (aux2.getMatricula() == aux.getMatricula())
@@ -64,7 +64,7 @@ namespace Trab_AlunosNota
                 }
             }
         }
-        public float getValores(int matricula)
+        public float getNotas(int matricula)
         {
             float nota1 = -1, nota2 = -1;
             Nota aux = inicio;
@@ -88,6 +88,76 @@ namespace Trab_AlunosNota
                 nota1 = 0;
             }
             return nota1;
+        }
+        public float getMedia(int matricula)
+        {
+            float nota1 = -1, nota2 = -1;
+            Nota aux = inicio;
+            if (aux != null)
+            {
+                do
+                {
+                    if (aux.getMatricula() == matricula)
+                    {
+                        if (nota1 < 0)
+                        {
+                            nota1 = aux.getNota(matricula);
+                        }
+                        else
+                        {
+                            nota2 = aux.getNota(matricula);
+                        }
+                    }
+                    aux = aux.getProximo();
+                } while (aux != null);
+            }
+            else
+            {
+                Console.WriteLine("Não existem notas cadastradas no sistema.");
+            }
+
+            if (nota1 < 0)
+            {
+                nota1 = 0;
+            }
+            if (nota2 < 0)
+            {
+                nota2 = 0;
+            }
+            return (nota1 + nota2) / 2;
+        }
+        public int getNotasMatriculas(int posicao)
+        {
+            Nota aux = inicio;
+            int contador = 0, matricula = 0;
+            if (!vazia())
+            {
+                matricula = aux.getMatricula();
+                do
+                {
+                    contador++;
+                    aux = aux.getProximo();
+                    if (aux != null && posicao > 0)
+                    {
+                        matricula = aux.getMatricula();
+                    }
+                } while (aux != null && contador < posicao);
+            }
+            return matricula;
+        }
+        public int getContador()
+        {
+            Nota aux = inicio;
+            int contador = 0;
+            if (!vazia())
+            {
+                do
+                {
+                    contador++;
+                    aux = aux.getProximo();
+                } while (aux != null);
+            }
+            return contador;
         }
     }
 }

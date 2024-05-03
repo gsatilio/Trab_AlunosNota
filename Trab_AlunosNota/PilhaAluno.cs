@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Runtime.Intrinsics.X86;
 using System.Text;
@@ -52,11 +53,19 @@ namespace Trab_AlunosNota
         {
             Aluno aux = topo;
             string texto = "";
-            do
+            if (aux != null)
             {
-                texto += $"{aux.ToString()}\n";
-                aux = aux.getAnterior();
-            } while (aux != null);
+                do
+                {
+                    texto += $"{aux.ToString()}\n";
+                    aux = aux.getAnterior();
+                } while (aux != null);
+            }
+            else
+            {
+                texto = "Não existem alunos cadastrados no sistema.";
+            }
+
             return texto;
         }
         public int getContador()
@@ -72,6 +81,45 @@ namespace Trab_AlunosNota
                 } while (aux != null);
             }
             return contador;
+        }
+        public int getMatriculas(int posicao)
+        {
+            int contador = 0, matricula = 0;
+            Aluno aux = topo;
+            if (!vazia())
+            {
+                matricula = aux.getMatricula();
+                do
+                {
+                    contador++;
+                    aux = aux.getAnterior();
+                    if (aux != null && posicao > 0)
+                    {
+                        matricula = aux.getMatricula();
+                    }
+                } while (aux != null && contador < posicao);
+            }
+            return matricula;
+        }
+        public string getNomeMatriculas(int matricula)
+        {
+            Aluno aux = topo;
+            string texto = "";
+            if (!vazia())
+            {
+                do
+                {
+                    if (aux != null)
+                    {
+                        if (aux.getMatricula() == matricula)
+                        {
+                            texto = "Matrícula...: [ " + aux.getMatricula() + " ] Aluno...: " + aux.getNome() + "\n";
+                        }
+                    }
+                    aux = aux.getAnterior();
+                } while (aux != null);
+            }
+            return texto;
         }
     }
 }

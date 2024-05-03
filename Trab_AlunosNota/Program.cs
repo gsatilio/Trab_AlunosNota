@@ -29,6 +29,7 @@ internal class Program
         FilaNota fila = new FilaNota();
         do
         {
+            Console.Clear();
             Console.WriteLine("1 - Cadastrar Aluno");
             Console.WriteLine("2 - Cadastrar Nota");
             Console.WriteLine("3 - Cadastrar Média");
@@ -37,21 +38,43 @@ internal class Program
             Console.WriteLine("6 - Excluir Nota");
             Console.WriteLine("7 - Sair");
             opc = int.Parse(Console.ReadLine());
-            switch(opc)
+            switch (opc)
             {
                 case 1:
                     pilha.push(cadastrarAluno());
                     break;
                 case 2:
-                    fila.push(cadastrarNota());
+                    int matricula = -1;
+                    Console.WriteLine(pilha.print());
+                    while (matricula < 0 || matricula > pilha.getContador())
+                    {
+                        Console.WriteLine("Informe a matrícula do aluno ou digite 0 para voltar:");
+                        matricula = int.Parse(Console.ReadLine());
+                        if (matricula > pilha.getContador())
+                        {
+                            Console.WriteLine("Aluno não cadastrado!");
+                        }
+                    }
+                    if (matricula > 0)
+                    {
+                        fila.push(cadastrarNota(pilha, matricula));
+                        Console.WriteLine("Pressione qualquer tecla para continuar...");
+                        Console.ReadKey();
+                    }
                     break;
                 case 3:
-                    cadastrarMedia(pilha);
+                    Console.WriteLine(pilha.print());
+                    cadastrarMedia(fila, pilha);
+                    Console.WriteLine("Pressione qualquer tecla para continuar...");
+                    Console.ReadKey();
                     break;
                 case 4:
-                    Console.WriteLine(pilha.print());
-                    Console.WriteLine("Informe a matricula para saber a nota");
-                    Console.WriteLine(fila.getValores(int.Parse(Console.ReadLine())));
+                    listarAlunosSemNota(fila, pilha);
+                    Console.WriteLine("Pressione qualquer tecla para continuar...");
+                    Console.ReadKey();
+                    //Console.WriteLine(pilha.print());
+                    //Console.WriteLine("Informe a matricula para saber a nota");
+                    //Console.WriteLine(fila.getNotas(int.Parse(Console.ReadLine())));
                     break;
                 case 5:
                     pilha.pop();
@@ -73,22 +96,90 @@ internal class Program
         Aluno temp = new Aluno(Console.ReadLine());
         return temp;
     }
-    static Nota cadastrarNota()
+    static Nota cadastrarNota(PilhaAluno pilha, int matricula)
     {
-        int matricula;
-        float nota;
-        Console.WriteLine("Informe a matrícula do aluno:");
-        matricula = int.Parse(Console.ReadLine());
-        Console.WriteLine("Informe a nota do aluno:");
-        nota = float.Parse(Console.ReadLine());
+        float nota = -1;
+        while (nota < 0 || nota > 10)
+        {
+            Console.WriteLine("Informe a nota do aluno:");
+            nota = float.Parse(Console.ReadLine());
+        }
 
         Nota temp = new Nota(matricula, nota);
         return temp;
     }
-    static void cadastrarMedia(PilhaAluno pilha)
+    static void cadastrarMedia(FilaNota fila, PilhaAluno pilha)
     {
-        Console.WriteLine(pilha.print());
-        Console.WriteLine("Informe a matrícula do aluno que deseja cadastrar a média.");
+        int matricula;
+        int nromatriculas = pilha.getContador();
 
+        Console.WriteLine("Informe a matrícula do aluno que deseja cadastrar a média.");
+        matricula = int.Parse(Console.ReadLine());
+        if (matricula > nromatriculas)
+        {
+            Console.WriteLine("Aluno não cadastrado!");
+        }
+        else
+        {
+            Console.WriteLine("A média do aluno é: " + fila.getMedia(matricula));
+        }
+    }
+    static void listarAlunosSemNota(FilaNota fila, PilhaAluno pilha)
+    {
+        int numeroAlunos = pilha.getContador();
+        int[] notas = new int[numeroAlunos];
+        int[] alunos = new int[numeroAlunos];
+        int contador = 0;
+        bool insere;
+        // POPULAR VETOR ALUNOS COM O CODIGO DOS ALUNOS PELA PILHA ALUNOS
+        for (int i = 0; i < numeroAlunos; i++)
+        {
+            alunos[i] = pilha.getMatriculas(i);
+        }
+        // POPULAR VETOR NOTAS COM O CODIGO DOS ALUNOS, SEM REPETIR
+        for (int i = 0; i < numeroAlunos; i++)
+        {
+            if (i == 0)
+            {
+                notas[i] = fila.getNotasMatriculas(i);
+                contador++;
+            }
+            else
+            {
+                insere = true;
+                for (int j = 0; j < numeroAlunos && insere; j++)
+                {
+                    if (notas[j] == fila.getNotasMatriculas(i))
+                    {
+                        insere = false;
+                    }
+                }
+                if (insere)
+                {
+                    notas[contador] = fila.getNotasMatriculas(i);
+                    contador++;
+                }
+            }
+        }
+        // COMPARO OS DOIS VETORES E ALTERO PARA NEGATIVO OS CODIGOS QUE EXISTEM NOS 2
+        for (int i = 0; i < numeroAlunos; i++)
+        {
+            for (int j = 0; j < numeroAlunos; j++)
+            {
+                if (alunos[i] == notas[j])
+                {
+                    alunos[i] = alunos[i] * -1;
+                }
+            }
+        }
+        // IMPRIMO SOMENTE OS POSITIVOS (ALUNOS SEM NOTA)
+        Console.WriteLine("Matriculas que não possuem notas cadastradas:");
+        for (int i = 0; i < numeroAlunos; i++)
+        {
+            if (alunos[i] > 0)
+            {
+                Console.Write(pilha.getNomeMatriculas(alunos[i]));
+            }
+        }
     }
 }
