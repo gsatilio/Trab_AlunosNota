@@ -130,58 +130,25 @@ internal class Program
     static void listarAlunosSemNota(FilaNota fila, PilhaAluno pilha)
     {
         int numeroAlunos = pilha.getContador();
-        int[] notas = new int[numeroAlunos];
-        int[] alunos = new int[numeroAlunos];
-        int contador = 0;
-        bool insere;
-        // POPULAR VETOR ALUNOS COM O CODIGO DOS ALUNOS PELA PILHA ALUNOS
+        int numeroNotas = fila.getContador();
+        int aluno;
+        bool possuiNota;
+
+        Console.WriteLine("Matrículas que não possuem notas cadastradas:");
         for (int i = 0; i < numeroAlunos; i++)
         {
-            alunos[i] = pilha.getMatriculas(i);
-        }
-        // POPULAR VETOR NOTAS COM O CODIGO DOS ALUNOS, SEM REPETIR
-        for (int i = 0; i < numeroAlunos; i++)
-        {
-            if (i == 0)
+            possuiNota = false;
+            aluno = pilha.getMatriculas(i);
+            for(int j = 0; j < numeroNotas && !possuiNota; j++)
             {
-                notas[i] = fila.getNotasMatriculas(i);
-                contador++;
-            }
-            else
-            {
-                insere = true;
-                for (int j = 0; j < numeroAlunos && insere; j++)
+                if(aluno == fila.getNotasMatriculas(j))
                 {
-                    if (notas[j] == fila.getNotasMatriculas(i))
-                    {
-                        insere = false;
-                    }
-                }
-                if (insere)
-                {
-                    notas[contador] = fila.getNotasMatriculas(i);
-                    contador++;
+                    possuiNota = true;
                 }
             }
-        }
-        // COMPARO OS DOIS VETORES E ALTERO PARA NEGATIVO OS CODIGOS QUE EXISTEM NOS 2
-        for (int i = 0; i < numeroAlunos; i++)
-        {
-            for (int j = 0; j < numeroAlunos; j++)
+            if (!possuiNota)
             {
-                if (alunos[i] == notas[j])
-                {
-                    alunos[i] = alunos[i] * -1;
-                }
-            }
-        }
-        // IMPRIMO SOMENTE OS POSITIVOS (ALUNOS SEM NOTA)
-        Console.WriteLine("Matriculas que não possuem notas cadastradas:");
-        for (int i = 0; i < numeroAlunos; i++)
-        {
-            if (alunos[i] > 0)
-            {
-                Console.Write(pilha.getNomeMatriculas(alunos[i]));
+                Console.WriteLine(pilha.getNomeMatriculas(aluno));
             }
         }
     }

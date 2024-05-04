@@ -95,11 +95,15 @@ namespace Trab_AlunosNota
             Nota aux = inicio;
             do
             {
-                if (aux.getMatricula() == matricula)
+                if (aux != null)
                 {
-                    resultado = true;
+
+                    if (aux.getMatricula() == matricula)
+                    {
+                        resultado = true;
+                    }
+                    aux = aux.getProximo();
                 }
-                aux = aux.getProximo();
             } while (aux != null);
             return resultado;
         }
