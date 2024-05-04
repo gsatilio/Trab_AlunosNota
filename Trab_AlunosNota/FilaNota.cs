@@ -89,6 +89,20 @@ namespace Trab_AlunosNota
             }
             return nota1;
         }
+        public bool possuiNotas(int matricula)
+        {
+            bool resultado = false;
+            Nota aux = inicio;
+            do
+            {
+                if (aux.getMatricula() == matricula)
+                {
+                    resultado = true;
+                }
+                aux = aux.getProximo();
+            } while (aux != null);
+            return resultado;
+        }
         public float getMedia(int matricula)
         {
             float nota1 = -1, nota2 = -1;
@@ -158,6 +172,26 @@ namespace Trab_AlunosNota
                 } while (aux != null);
             }
             return contador;
+        }
+        public string print()
+        {
+            Nota aux = inicio;
+            string texto = "Inicio =>\n";
+            if (aux != null)
+            {
+                do
+                {
+                    texto += $"{aux.ToString()}\n";
+                    aux = aux.getProximo();
+                } while (aux != null);
+                texto += " <= Fim";
+            }
+            else
+            {
+                texto = "Não existem notas cadastradas no sistema.";
+            }
+
+            return texto;
         }
     }
 }

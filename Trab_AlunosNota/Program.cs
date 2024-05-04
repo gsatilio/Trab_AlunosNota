@@ -18,6 +18,7 @@
     VI) As notas devem ser excluídas respeitando a regras de fila
 */
 
+using System;
 using Trab_AlunosNota;
 
 internal class Program
@@ -72,14 +73,16 @@ internal class Program
                     listarAlunosSemNota(fila, pilha);
                     Console.WriteLine("Pressione qualquer tecla para continuar...");
                     Console.ReadKey();
-                    //Console.WriteLine(pilha.print());
-                    //Console.WriteLine("Informe a matricula para saber a nota");
-                    //Console.WriteLine(fila.getNotas(int.Parse(Console.ReadLine())));
                     break;
                 case 5:
-                    pilha.pop();
+                    excluirAluno(fila, pilha);
+                    Console.WriteLine("Pressione qualquer tecla para continuar...");
+                    Console.ReadKey();
                     break;
                 case 6:
+                    excluirNota(fila);
+                    Console.WriteLine("Pressione qualquer tecla para continuar...");
+                    Console.ReadKey();
                     break;
                 case 7:
                     Console.WriteLine("Adeus");
@@ -179,6 +182,45 @@ internal class Program
             if (alunos[i] > 0)
             {
                 Console.Write(pilha.getNomeMatriculas(alunos[i]));
+            }
+        }
+    }
+    static void excluirNota(FilaNota fila)
+    {
+        int opc = 0;
+        Console.WriteLine("Notas cadastradas:");
+        Console.WriteLine(fila.print());
+        Console.WriteLine("Deseja excluir a primeira nota da fila? Digite 1 para sim.");
+        opc = int.Parse(Console.ReadLine());
+        if (opc == 1)
+        {
+            fila.pop();
+        }
+    }
+    static void excluirAluno(FilaNota fila, PilhaAluno pilha)
+    {
+        int opc = 0;
+        int topo = 0;
+        int numeroAlunos = pilha.getContador();
+        int[] notas = new int[numeroAlunos];
+        int[] alunos = new int[numeroAlunos];
+        bool insere;
+
+        topo = pilha.getContador();
+        Console.WriteLine("Alunos cadastrados:");
+        Console.WriteLine(pilha.print());
+        Console.WriteLine("Deseja excluir o aluino do topo da pilha? Digite 1 para sim.");
+        opc = int.Parse(Console.ReadLine());
+        if (opc == 1)
+        {
+            if (!fila.possuiNotas(topo))
+            {
+                pilha.pop();
+            } else
+            {
+                Console.WriteLine("Atenção:");
+                Console.WriteLine(pilha.getNomeMatriculas(topo));
+                Console.WriteLine("Possui notas e não pode ser excluído.");
             }
         }
     }
