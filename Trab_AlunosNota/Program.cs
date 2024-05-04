@@ -187,14 +187,22 @@ internal class Program
     }
     static void excluirNota(FilaNota fila)
     {
-        int opc = 0;
-        Console.WriteLine("Notas cadastradas:");
-        Console.WriteLine(fila.print());
-        Console.WriteLine("Deseja excluir a primeira nota da fila? Digite 1 para sim.");
-        opc = int.Parse(Console.ReadLine());
-        if (opc == 1)
+        int opc = 0, contador = 0;
+        contador = fila.getContador();
+        if (contador == 0)
         {
-            fila.pop();
+            Console.WriteLine("Não há notas para serem excluídas.");
+        }
+        else
+        {
+            Console.WriteLine("Notas cadastradas:");
+            Console.WriteLine(fila.print());
+            Console.WriteLine("Deseja excluir a primeira nota da fila? Digite 1 para sim.");
+            opc = int.Parse(Console.ReadLine());
+            if (opc == 1)
+            {
+                fila.pop();
+            }
         }
     }
     static void excluirAluno(FilaNota fila, PilhaAluno pilha)
@@ -207,20 +215,28 @@ internal class Program
         bool insere;
 
         topo = pilha.getContador();
-        Console.WriteLine("Alunos cadastrados:");
-        Console.WriteLine(pilha.print());
-        Console.WriteLine("Deseja excluir o aluino do topo da pilha? Digite 1 para sim.");
-        opc = int.Parse(Console.ReadLine());
-        if (opc == 1)
+        if (topo == 0)
         {
-            if (!fila.possuiNotas(topo))
+            Console.WriteLine("Não há alunos para serem excluídos.");
+        }
+        else
+        {
+            Console.WriteLine("Alunos cadastrados:");
+            Console.WriteLine(pilha.print());
+            Console.WriteLine("Deseja excluir o aluino do topo da pilha? Digite 1 para sim.");
+            opc = int.Parse(Console.ReadLine());
+            if (opc == 1)
             {
-                pilha.pop();
-            } else
-            {
-                Console.WriteLine("Atenção:");
-                Console.WriteLine(pilha.getNomeMatriculas(topo));
-                Console.WriteLine("Possui notas e não pode ser excluído.");
+                if (!fila.possuiNotas(topo))
+                {
+                    pilha.pop();
+                }
+                else
+                {
+                    Console.WriteLine("Atenção:");
+                    Console.WriteLine(pilha.getNomeMatriculas(topo));
+                    Console.WriteLine("Possui notas e não pode ser excluído.");
+                }
             }
         }
     }
